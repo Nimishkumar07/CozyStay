@@ -6,7 +6,7 @@ const {listingSchema,reviewSchema} = require("./schema.js")
 module.exports.isLoggedIn = (req, res, next)=>{
     if(!req.isAuthenticated()){
         req.session.redirectUrl = req.originalUrl
-        req.flash("error","you must be logged in WonderLust")
+        req.flash("error","you must be logged in CozyStay")
         return res.redirect("/login")
     }
     next()
