@@ -1,6 +1,6 @@
 # CozyStay
 
-CozyStay is a **full stack web application** where users can list their properties for rent, book vacation properties, and explore destinations worldwide.
+CozyStay is a **full stack web application** where users can list their properties for rent or book properties on vacations, and explore destinations worldwide.
 
 ## Features
 
