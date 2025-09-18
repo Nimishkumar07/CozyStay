@@ -196,6 +196,6 @@
   transition: background-position .7s;
 }
 .starMod{
-  transform: scale(0.6);
+  transform: scale(0.7);
   transform-origin: left;
 }

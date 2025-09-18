@@ -1,0 +1,69 @@
+<% layout('layouts/boilerplate') -%>
+
+  <div class="container my-5">
+    <div class="row justify-content-center">
+      <div class="col-12 col-md-8 col-lg-6">
+        <div class="card shadow-lg border-0 rounded-4">
+          <div class="card-body p-4">
+
+
+            <h2 class="card-title fw-bold mb-4 text-center text-primary">
+              <i class="fa-solid fa-file-contract me-2"></i> Booking Details
+            </h2>
+
+
+            <p class="mb-3">
+              <i class="fa-solid fa-house me-2 text-secondary"></i>
+              <span class="fw-semibold">Listing:</span>
+              <%= booking.listing.title %>
+            </p>
+
+
+            <p class="mb-3">
+              <i class="fa-regular fa-calendar-days me-2 text-secondary"></i>
+              <span class="fw-semibold">Dates:</span>
+              <%= booking.startDate.toDateString() %> → <%= booking.endDate.toDateString() %>
+            </p>
+
+
+            <p class="mb-3">
+              <i class="fa-solid fa-user-group me-2 text-secondary"></i>
+              <span class="fw-semibold">Guests:</span>
+              <%= booking.guests %>
+            </p>
+
+
+            <p class="mb-3">
+              <i class="fa-solid fa-indian-rupee-sign me-2 text-secondary"></i>
+              <span class="fw-semibold">Total Price:</span> ₹ <%= booking.totalPrice %>
+                <b style="color: green;">(Pay-On-Arrival)</b>
+            </p>
+
+
+            <p class="mb-0">
+              <i class="fa-solid fa-circle me-2 text-secondary"></i>
+              <span class="fw-semibold">Status:</span>
+              <span class="badge 
+              <% if(booking.status === 'confirmed') { %> bg-success 
+              <% } else if(booking.status === 'pending') { %> bg-warning text-dark
+              <% } else { %> bg-danger <% } %>">
+                <%= booking.status %>
+              </span>
+            </p>
+
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <style>
+    .card {
+      transition: transform 0.2s ease, box-shadow 0.2s ease;
+    }
+
+    .card:hover {
+      transform: translateY(-4px);
+      box-shadow: 0 6px 20px rgba(0, 0, 0, 0.1);
+    }
+  </style>

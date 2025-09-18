@@ -1,66 +1,131 @@
 <style>
-.search-btn{
-  background-color: #fe424d;
-  color: #fff;
-  border-radius: 25px;
-  padding: 0 1rem 0 1rem;
-}
-.search-btn:hover{
-  background-color: #fe424d;
-  color: #fff;
-}
-.search-btn i {
-  display: inline;
-  margin-right: 0.5rem;
-}
-.search-inp{
-  border-radius: 25px;
-  padding: 0.5rem 3rem 0.5rem 3rem;
-  font-size: 0.9rem;
-}
-@media(max-width:767px) {
-  .navDrop{
-    background-color: rgb(198, 205, 212);
-    padding: 0.75rem; 
-    border-radius: 0.25rem;
+  .search-btn {
+    background-color: #FF385C;
+    color: #fff;
+    border-radius: 25px;
+    padding: 0 1rem 0 1rem;
   }
-}
-@media(max-width:955px){
-.explore{
-  display: none ;
-}
-}
 
+  .search-btn:hover {
+    background-color: #f5202e;
+    color: #fff;
+  }
+
+  .search-btn i {
+    display: inline;
+    margin-right: 0.5rem;
+  }
+
+  .search-inp {
+    border-radius: 25px;
+    padding: 0.5rem 3rem 0.5rem 3rem;
+    font-size: 0.9rem;
+  }
+
+  @media (max-width: 767px) {
+    .navDrop {
+      /* background-color: rgb(198, 205, 212); */
+      padding: 0.75rem;
+      border-radius: 0.25rem;
+    }
+  }
+
+  @media (max-width: 955px) {
+    .explore {
+      display: none;
+    }
+  }
+
+  .logout {
+    background-color: #eeeeee;
+    border-radius: 9.8px;
+    padding-left: 12px !important;
+    padding-right: 12px !important;
+  }
+
+  .logout:hover {
+    background-color: #e6e6e6;
+
+  }
+
+  .cozystay {
+    color: #FF385C;
+    font-size: 1.8rem !important;
+  }
+
+  .navbar-nav {
+    font-size: 1.1rem !important;
+  }
+
+  .navbar-brand {
+    font-size: 1.5rem !important;
+    transition: scale 0.3s ease-in-out;
+  }
+
+  .navbar-brand:hover {
+    color: #f5202e !important;
+    scale: 1.05;
+
+  }
+
+  .host {
+    border-radius: 50px;
+    padding-left: 12px !important;
+    padding-right: 12px !important;
+  }
+
+  .host:hover {
+    background-color: #eeeeee;
+    border-radius: 50px;
+    padding-left: 12px !important;
+    padding-right: 12px !important;
+  }
+
+  .navbar {
+    z-index: 1080 !important;
+
+  }
 </style>
 
-<nav class="navbar navbar-expand-md bg-body-light border-bottom sticky-top">
-    <div class="container-fluid">
-      <a class="navbar-brand" href="/listings"><i class="fa-solid fa-compass"></i> CozyStay</a>
-      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
-        <span class="navbar-toggler-icon"></span>
-      </button>
-      <div class="collapse navbar-collapse navDrop" id="navbarNav">
-        <div class="navbar-nav">
-            <a class="nav-link explore" href="/listings">Explore</a>
-        </div>
-        <div class="navbar-nav ms-auto">
-          <form class="d-flex" role="search">
-            <input class="form-control me-2 search-inp" type="search" placeholder="Search destinations" aria-label="Search"/>
-            <button class="btn search-btn" type="submit"><i class="fa-solid fa-magnifying-glass"></i>Search</button>
-          </form>
-        </div>
-        <div class="navbar-nav ms-auto" >
-          <a class="nav-link" href="/listings/new">Become a host</a>
-          <% if(!currUser) { %>
-            <a class="nav-link" href="/signup"><b>SignUp</b></a>
-            <a class="nav-link" href="/login"><b>LogIn</b></a>
+<nav class="py-3 navbar navbar-expand-xl bg-body-light shadow border-bottom sticky-top ">
+  <div class="container-fluid ms-3 me-3">
+    <a class="navbar-brand d-flex align-items-center" href="/listings"><i
+        class="fa-solid fa-house-signal fa-xl me-2"></i>
+      <span class="cozystay fw-bold">CozyStay</span></a>
+    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav"
+      aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse navDrop" id="navbarNav">
+      <div class="navbar-nav ms-auto">
+        <form class="d-flex mt-2 mt-lg-0" action="/listings" method="GET">
+          <input class="form-control me-2 search-inp" type="search" name="location" placeholder="Search destinations"
+            aria-label="Search" value="<%= typeof searchLocation !== 'undefined' ? searchLocation : '' %>" />
+          <button class="btn search-btn" type="submit">
+            <i class="fa-solid fa-magnifying-glass"></i>Search
+          </button>
+        </form>
+      </div>
+      <div class="navbar-nav ms-auto">
+        <a class="nav-link  my-1 my-lg-0 host" href="/listings/new">Become a host</a>
+        <% if(!currUser) { %>
+          <a class="nav-link ms-2 text-center logout" href="/signup"><b>SignUp</b></a>
+          <a class="nav-link ms-2 text-center mt-2 mt-lg-0 logout" href="/login"><b>LogIn</b></a>
           <% } %>
-
-          <% if(currUser) { %>
-          <a class="nav-link" href="/logout">LogOut</a>
-          <% } %>
-          
-        </div>
+            <% if(currUser) { %>
+              <div class="nav-item dropdown ms-2 ps-1">
+                <a class=" nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown"
+                  aria-expanded="false">
+                  Bookings
+                </a>
+                <div class="dropdown-menu mb-2">
+                  <a class="dropdown-item" href="/bookings">My Bookings</a>
+                  <a class="dropdown-item" href="/bookings/host/manage">Manage Requests</a>
+                </div>
+              </div>
+              <a class="nav-link ms-2 text-center logout" href="/logout">LogOut</a>
+              <% } %>
       </div>
     </div>
-  </nav>
+  </div>
+</nav>

@@ -5,20 +5,28 @@ body{
     min-height: 100vh ;
     
 }
+@media (max-width: 992px){
+    body.has-floating-book{
+        padding-bottom: 70px !important;
+    }
+}
+::-webkit-scrollbar{
+    display: none;
+}
 .container{
     flex: 1;
 }
 /* navbar */
 .navbar{
-    height: 5rem;
+    
     background-color: white;
 }
 .fa-compass{
-    color: #fe424d;
+    color: #FF385C;
     font-size: 2rem;
 }
 .navbar-brand{
-    color: #fe424d !important;
+    color: #FF385C !important;
     font-size: 1.5rem !important;
 }
 /* footer */
@@ -30,6 +38,7 @@ body{
     flex-wrap: wrap; 
     justify-content: center;
     align-items: center;
+    margin-top: 35px;
 }
 .f-info-link a{ 
     text-decoration: none;
@@ -76,7 +85,7 @@ body{
 
 /* button */
 .edit-btn{
-    background-color: #fe424d !important;
+    background-color: #FF385C !important;
     border: none !important;
 }
 
@@ -91,5 +100,8 @@ body{
 /* map */
 #map{
     height: 400px;
-    width: 60vw;
+    
 }
+
+
+

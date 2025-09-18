@@ -1,109 +1,324 @@
 <% layout('layouts/boilerplate') -%>
 <body>
+<script>
+  const mapToken = "<%= process.env.MAP_TOKEN %>";
+  const listing = <%- JSON.stringify(listing) %>;
+</script>
 
-    <script>
-        const mapToken = "<%= process.env.MAP_TOKEN %>";
-        const listing = <%- JSON.stringify(listing) %>;
-    </script>
+<div class="container my-4">
+  <div class="row g-4">
+    
+    <!-- Left column -->
+    <div class="col-lg-8">
+      <!-- Title -->
+      <h2 class="fw-bold mb-3"><%= listing.title %></h2>
+      
+      <!-- Image -->
+      <div class=" border-0 mb-5">
+        <img src="<%= listing.image.url %>" class="card-img-top rounded-3 show-img" alt="listing_img">
+      
 
-<div class="row mt-3">
-    <div class="col-md-8 offset-md-2">
-        <h3><%= listing.title %></h3>
-    </div>
-
-    <div class="card col-md-8 offset-md-2 listing-card" >
-        <img src="<%= listing.image.url %>" class="card-img-top show-img" alt="listing_img">
-        <div class="card-body">
-          <p class="card-text">
-            <p class="card-text"><b>Owned by: </b><i><%= listing.owner.username %></i></p>
-           <p> <%= listing.description %></p>
-           <p> &#8377; <%= listing.price.toLocaleString("en-IN") %> </p>
-            <p><%= listing.location %> </p>
-            <p><%= listing.country %> </p>
-          </p>
+      <!-- Info -->
+      
+        <div class=" p-3">
+          <p class="mb-2"><b>Owned by:</b> <i>@<%= listing.owner.username %></i></p>
+          <p class="mb-2"><%= listing.description %></p>
+          <p class="fw-semibold mb-2">₹ <%= listing.price.toLocaleString("en-IN") %> / night</p>
+          <p class="text-muted mb-0"><i class="fa-solid fa-location-dot me-1"></i><%= listing.location %>, <%= listing.country %></p>
         </div>
-    </div>
-
-
-    
-    <% if(currUser && currUser._id.equals(listing.owner._id)) { %>
-    <div class="btns">
-        <a href="/listings/<%= listing._id %>/edit" class="btn btn-dark offset-3 edit-btn">Edit</a>
-    
-    <form action="/listings/<%= listing.id %>?_method=DELETE" method="post">
-        <button  class="btn btn-dark offset-5 ">Delete</button>
-    </form>
-    </div>
-    <% } %>
-
-    <div class="col-10 offset-1 mb-3">
-        
-        <% if(currUser){ %>
-            <hr>
-        <form action="/listings/<%= listing.id %>/reviews" method="post"  novalidate class="needs-validation">
-            <h4>Leave a Review</h4>
-            <!-- <div class="mb-3 mt-3">
-                <label for="rating" class="form-label">Rating</label>
-                <input type="range" name="review[rating]" id="rating" min="1" max="5" class="form-range">
-            </div> -->
-            <div class="mb-3 mt-3">
-                <label for="rating" class="form-label">Rating</label>
+      </div>
+<hr>
+      <!-- Reviews -->
+      <div class="card shadow-sm border-0 mb-5 mt-4">
+        <div class="card-body p-3">
+          <% if(currUser){ %>
+            <form action="/listings/<%= listing.id %>/reviews" method="post" class="mb-5 ">
+              <h5 class="fw-bold">Leave a Review</h5>
+              <div class="mb-3">
+                <label class="form-label">Rating</label>
                 <fieldset class="starability-slot">
-            
-                <input type="radio" id="no-rate" class="input-no-rate" name="review[rating]" value="1" checked aria-label="No rating." />
-                <input type="radio" id="first-rate1" name="review[rating]" value="1" />
-                <label for="first-rate1" title="Terrible">1 star</label>
-                <input type="radio" id="first-rate2" name="review[rating]" value="2" />
-                <label for="first-rate2" title="Not good">2 stars</label>
-                <input type="radio" id="first-rate3" name="review[rating]" value="3" />
-                <label for="first-rate3" title="Average">3 stars</label>
-                <input type="radio" id="first-rate4" name="review[rating]" value="4" />
-                <label for="first-rate4" title="Very good">4 stars</label>
-                <input type="radio" id="first-rate5" name="review[rating]" value="5" />
-                <label for="first-rate5" title="Amazing">5 stars</label>
+                  <input type="radio" id="no-rate" class="input-no-rate" name="review[rating]" value="1" checked aria-label="No rating." />
+                  <input type="radio" id="first-rate1" name="review[rating]" value="1"><label for="first-rate1">1 star</label>
+                  <input type="radio" id="first-rate2" name="review[rating]" value="2"><label for="first-rate2">2 stars</label>
+                  <input type="radio" id="first-rate3" name="review[rating]" value="3"><label for="first-rate3">3 stars</label>
+                  <input type="radio" id="first-rate4" name="review[rating]" value="4"><label for="first-rate4">4 stars</label>
+                  <input type="radio" id="first-rate5" name="review[rating]" value="5"><label for="first-rate5">5 stars</label>
                 </fieldset>
-            </div>
-            <div class="mb-3 mt-3">
-                <label for="comment" class="form-label">Comments</label>
-                <textarea name="review[comment]" id="comment" cols="30" rows="5" class="form-control" required></textarea>
-                <div class="invalid-feedback">Please add Some Comments for Review</div>
-            </div>
-
-            <button class="btn btn-outline-dark">Submit</button>
-        </form>
-        <% } %>
-        <hr>
-        <% if(listing.reviews.length > 0) { %>
-        
-        <div class="row col">
-            <p><b>All Reviews</b></p>
-            <% for(review of listing.reviews) { %>
-            <div  class="card col-md-5 ms-md-5 mb-3">
-                <div class="card-body pt-2 pb-2">
-                    <h5 class="card-title">@<%= review.author.username %></h5>
-                    <p class="starability-result card-text starMod" data-rating="<%= review.rating %>"></p>
-                    <p class="card-text"><%= review.comment %></p>
-                    
-                <% if(currUser && currUser._id.equals(listing.owner._id)) { %>
-                    <form action="/listings/<%= listing.id %>/reviews/<%= review._id %>?_method=DELETE" method="post">
-                        <button class="btn  btn-sm btn-dark mb-3">Delete</button>
-                    </form>
-                <% } %>
+              </div>
+              <div class="mb-3">
+                <label class="form-label">Comments</label>
+                <textarea name="review[comment]" rows="4" class="form-control" required></textarea>
+              </div>
+              <button class="btn btn-outline-dark">Submit</button>
+            </form>
+          <% } %>
+<hr>
+          <% if(listing.reviews.length > 0) { %>
+            <h5 class="fw-bold mb-3 mt-4">All Reviews</h5>
+            <div class="row g-3">
+              <% listing.reviews.forEach(review => { %>
+                <div class="col-md-6">
+                  <div class="card border-0 shadow-sm h-100">
+                    <div class="card-body p-2">
+                      <h6>@<%= review.author.username %></h6>
+                      <p class="starability-result starMod" data-rating="<%= review.rating %>"></p>
+                      <p class="small text-muted"><%= review.comment %></p>
+                      <% if(currUser && currUser._id.equals(listing.owner._id)) { %>
+                        <form action="/listings/<%= listing.id %>/reviews/<%= review._id %>?_method=DELETE" method="post">
+                          <button class="btn btn-sm btn-dark">Delete</button>
+                        </form>
+                      <% } %>
+                    </div>
+                  </div>
                 </div>
+              <% }) %>
             </div>
-            <% } %>
+          <% } else { %>
+            <p class="text-muted fst-italic">No reviews yet.</p>
+          <% } %>
         </div>
-        <% } %>
+      </div>
 
-       
+      <!-- Map -->
+      <div class="mb-4">
+        <h5 class="fw-bold mb-3">Where you'll be</h5>
+        <div id="map" class="rounded shadow-sm"></div>
+      </div>
     </div>
 
-     <div class="col-10 offset-2 mb-3">
-            <h3>Where you'll be</h3>
-            <div id="map"></div>
-     </div>
-
-
+   <!-- Right column -->
+<div class="col-lg-4">
+  <% if(currUser && currUser._id.equals(listing.owner._id)) { %>
+    <!-- Owner View -->
+    <div class="card shadow-lg border-0 sticky-top" style="top: 90px;">
+      <div class="card-body p-3">
+        <h5 class="fw-bold mb-3">Manage this listing</h5>
+        <div class="d-grid gap-2">
+          <a href="/listings/<%= listing._id %>/edit" class="btn btn-outline-dark">Edit Listing</a>
+          <form action="/listings/<%= listing._id %>?_method=DELETE" method="POST">
+            <button class="btn btn-danger w-100">Delete Listing</button>
+          </form>
+        </div>
+      </div>
+    </div>
+  <% } else { %>
+    <!-- booking form (visitor) -->
+    <div class="card booking shadow-lg border-0 sticky-top" style="top: 90px;">
+      <div class="card-body p-3">
+        <h5 class="fw-bold mb-3">Book this stay</h5>
+        
+        <% if(currUser) { %>
+          <!-- logged-in user booking -->
+          <form action="/listings/<%= listing._id %>/bookings" method="POST"  class="needs-validation" >
+            <div class="mb-3">
+              <label class="form-label">Check-in</label>
+              <input placeholder="YYYY-MM-DD" type="text" id="checkIn" name="startDate" class="form-control" required>
+              <div class="invalid-feedback">Please select a valid check-in date.</div>
+              <div class="form-text">Choose a valid date</div>
+            </div>
+            <div class="mb-3">
+              <label class="form-label">Check-out</label>
+              <input placeholder="YYYY-MM-DD" type="text" id="checkOut" name="endDate" class="form-control" required>
+              <div class="invalid-feedback">Please select a valid check-out date.</div>
+              <div class="form-text">Choose a valid date</div>
+            </div>
+            <div class="mb-3">
+              <label class="form-label">Guests</label>
+              <input type="number" id="guests" name="guests" min="1" max="4" value="1" class="form-control" required>
+            </div>
+            <div id="priceSummary" class="p-3 rounded-3 bg-light border d-none">
+              <p>Nightly Price: ₹<%= listing.price %></p>
+              <p id="nightsLine"></p>
+              <p id="gstLine"></p>
+              <h5 id="totalLine" class="text-danger fw-bold"></h5>
+              <b style="color: green;">(Pay-On-Arrival)</b>
+            </div>
+            <button type="submit" class="btn btn-dark w-100 mt-3">Reserve Now</button>
+          </form>
+        <% } else { %>
+          <!-- visitor booking (redirects to signup) -->
+          <form action="/signup" method="GET">
+            <div class="mb-3">
+              <label class="form-label">Check-in</label>
+              <input placeholder="YYYY-MM-DD" type="text" class="form-control" disabled>
+            </div>
+            <div class="mb-3">
+              <label class="form-label">Check-out</label>
+              <input placeholder="YYYY-MM-DD" type="text" class="form-control" disabled>
+            </div>
+            <div class="mb-3">
+              <label class="form-label">Guests</label>
+              <input type="number" value="1" class="form-control" disabled>
+            </div>
+            <div class="p-3 rounded-3 bg-light border">
+              <p>Nightly Price: ₹<%= listing.price %></p>
+              <p class="text-muted">Login to see total price</p>
+            </div>
+            <button type="submit" class="btn btn-dark w-100 mt-3">Reserve Now</button>
+            <small class="text-muted d-block mt-2">You need an account to book</small>
+          </form>
+        <% } %>
+      </div>
+    </div>
+  <% } %>
 </div>
+
+
+<!-- floating book now (visible only on mobile) -->
+<% if(currUser && currUser._id.equals(listing.owner._id)) { %>
+  <!-- owner should not see floating bar -->
+<% } else { %>
+  <div id="floatingBookBar" 
+       class="d-lg-none fixed-bottom bg-white border-top shadow-sm p-3 d-flex justify-content-between align-items-center" 
+       style="z-index:1050;">
+    <div>
+      <span id="floatingPrice" class="fw-bold text-dark">Add dates for price</span>
+    </div>
+
+    <% if(currUser) { %>
+      <!-- logged-in user -->
+      <button id="floatingBookBtn" class="btn btn-dark">Reserve Now</button>
+    <% } else { %>
+      <!-- visitor (redirects to signup) -->
+      <a href="/signup" class="btn btn-dark">Reserve Now</a>
+    <% } %>
+  </div>
+<% } %>
+
+
+<style>
+  #floatingBookBar {
+    display: none; 
+    height: 70px;
+  }
+
+</style>
+
+  </div>
+</div>
+
+<script>
+  document.addEventListener("DOMContentLoaded", async () => {
+  const listingId = "<%= listing._id %>";
+  const nightlyPrice = Number("<%= listing.price %>");
+
+  // fetch already booked ranges
+  const response = await fetch(`/bookings/unavailable/${listingId}`);
+  const blocked = await response.json();
+
+  const disabledRanges = blocked.map(range => ({
+    from: range.start,
+    to: range.end
+  }));
+
+  const today = new Date();
+
+  //  find earliest available date 
+  function getEarliestAvailable() {
+    let checkDate = new Date(today);
+    while (disabledRanges.some(r => checkDate >= new Date(r.from) && checkDate <= new Date(r.to))) {
+      checkDate.setDate(checkDate.getDate() + 1);
+    }
+    return checkDate;
+  }
+
+  const earliestAvailable = getEarliestAvailable();
+
+  const checkOutCalendar = flatpickr("#checkOut", {
+    minDate: earliestAvailable,
+    disable: disabledRanges,
+    dateFormat: "Y-m-d",
+    onChange: updatePrice
+  });
+
+  const checkInCalendar = flatpickr("#checkIn", {
+    minDate: earliestAvailable,
+    disable: disabledRanges,
+    dateFormat: "Y-m-d",
+    onChange: function(selectedDates) {
+      if (selectedDates.length > 0) {
+        checkOutCalendar.set("minDate", selectedDates[0].fp_incr(1));
+      }
+      updatePrice();
+    }
+  });
+
+
+    function updatePrice() {
+      const checkIn = document.getElementById("checkIn").value;
+      const checkOut = document.getElementById("checkOut").value;
+      const summary = document.getElementById("priceSummary");
+      const floatingBar = document.getElementById("floatingBookBar");
+      const floatingPrice = document.getElementById("floatingPrice");
+
+      if (checkIn && checkOut) {
+        const start = new Date(checkIn);
+        const end = new Date(checkOut);
+        const nights = (end - start) / (1000 * 60 * 60 * 24);
+
+        if (nights > 0) {
+          const base = nightlyPrice * nights;
+          const gst = Math.round(base * 0.18);
+          const total = base + gst;
+
+          document.getElementById("nightsLine").innerText =
+            `${nights} nights × ₹${nightlyPrice} = ₹${base.toLocaleString("en-IN")}`;
+          document.getElementById("gstLine").innerText =
+            `GST (18%): ₹${gst.toLocaleString("en-IN")}`;
+          document.getElementById("totalLine").innerText =
+            `Total: ₹${total.toLocaleString("en-IN")}`;
+
+          // show price summary + floating bar
+          summary.classList.remove("d-none");
+          floatingPrice.innerText = `₹${total.toLocaleString("en-IN")} total`;
+          floatingBar.style.display = "flex";
+          return;
+        }
+      }
+
+      // if invalid / missing dates or nights <= 0 → reset
+      summary.classList.add("d-none");
+      floatingBar.style.display = "none";
+    }
+
+    // MutationObserver to toggle has-floating-book class based on floatingBar visibility
+    const floatingBar = document.getElementById("floatingBookBar");
+    const observer = new MutationObserver(() => {
+      const isVisible = window.getComputedStyle(floatingBar).display !== "none";
+      if (isVisible) {
+        document.body.classList.add("has-floating-book");
+      } else {
+        document.body.classList.remove("has-floating-book");
+      }
+    });
+    observer.observe(floatingBar, { attributes: true, attributeFilter: ["style"] });
+
+    // Ensure updatePrice runs on page load in case of pre-filled values
+    updatePrice();
+    // Also update on manual input (for browsers that don't trigger flatpickr events)
+    document.getElementById("checkIn").addEventListener("input", updatePrice);
+    document.getElementById("checkOut").addEventListener("input", updatePrice);
+
+
+  });
+  
+</script>
+
+<script>
+  document.getElementById("floatingBookBtn").addEventListener("click", () => {
+  document.querySelector("form[action*='/bookings']").scrollIntoView({
+    behavior: "smooth"
+  });
+});
+
+</script>
 <script src="/js/map.js"></script>
+
+<style>
+  #map { height: 300px; }
+  .card { transition: transform .2s ease, box-shadow .2s ease; }
+  .card:hover { transform: translateY(-3px); box-shadow: 0 6px 20px rgba(0,0,0,0.1); }
+  .show-img { max-height: 450px; object-fit: cover; }
+  
+</style>
 </body>

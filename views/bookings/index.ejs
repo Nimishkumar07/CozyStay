@@ -1,0 +1,79 @@
+<% layout('layouts/boilerplate') -%>
+
+  <div class="container my-5">
+    <h2 class="mb-4 fw-bold text-center">
+      <i class="fa-solid fa-suitcase-rolling me-2"></i> My Bookings
+    </h2>
+
+    <% if (bookings.length===0) { %>
+      <div class="alert alert-info text-center shadow-sm rounded">
+        <i class="fa-solid fa-calendar-xmark me-2"></i>
+        You don’t have any bookings yet.
+      </div>
+      <% } else { %>
+        <div class="row g-4">
+          <% bookings.forEach(booking=> { %>
+            <div class="col-12">
+              <div class="card h-100 shadow p-3 border-0 rounded-3">
+                <div class="card-body d-flex flex-column">
+
+                  <!-- Title + Badge wrapper -->
+                  <div class="d-flex flex-column flex-md-row justify-content-md-between">
+                    <h5 class="card-title fw-semibold text-truncate mb-2 ">
+                      <a href="/bookings/<%= booking._id %>" class="text-decoration-none text-dark">
+                        <i class="fa-solid fa-house me-2"></i>
+                        <%= booking.listing.title %>
+                      </a>
+                    </h5>
+
+                    <!-- Badge for md+ screens -->
+                    <div class="d-none d-md-block">
+                      <span class="badge 
+                    <% if(booking.status === 'confirmed') { %> bg-success 
+                    <% } else if(booking.status === 'pending') { %> bg-warning text-dark
+                    <% } else { %> bg-danger <% } %>">
+                        <i class="fa-solid fa-circle me-1"></i>
+                        <%= booking.status %>
+                      </span>
+                    </div>
+                  </div>
+
+                  <!-- Dates -->
+                  <p class="card-text text-muted small mt-2 mb-2 ms-1">
+                    <i class="fa-regular fa-calendar-days me-2"></i>
+                    <%= booking.startDate.toDateString() %> → <%= booking.endDate.toDateString() %>
+                  </p>
+
+                  <!-- Badge for <md screens -->
+                  <div class="d-block d-md-none mt-1">
+                    <span class="badge 
+                  <% if(booking.status === 'Confirmed') { %> bg-success 
+                  <% } else if(booking.status === 'Pending') { %> bg-warning text-dark
+                  <% } else { %> bg-danger <% } %>">
+                      <i class="fa-solid fa-circle me-1"></i>
+                      <%= booking.status %>
+                    </span>
+                  </div>
+
+                </div>
+              </div>
+            </div>
+            <% }) %>
+        </div>
+        <% } %>
+  </div>
+
+  <style>
+    .card-title a:hover {
+      color: #FF385C !important;
+    }
+
+    .card {
+      transition: transform 0.2s ease, box-shadow 0.2s ease;
+    }
+
+    .card:hover {
+      transform: translateY(-4px);
+      box-shadow: 0 6px 20px rgba(0, 0, 0, 0.1);
+    }
+  </style>

@@ -1,0 +1,159 @@
+<% layout('layouts/boilerplate') -%>
+
+  <div class="container my-5">
+    <h2 class="fw-bold mb-4 text-center">
+      <i class="fa-solid fa-clipboard-list me-2"></i> Manage Booking Requests
+    </h2>
+
+    <% if (bookings.length===0) { %>
+      <div class="alert alert-info text-center shadow-sm rounded">
+        <i class="fa-solid fa-calendar-xmark me-2"></i>
+        No bookings for your listings yet.
+      </div>
+      <% } else { %>
+
+        <!-- Desktop: table view -->
+        <div class="card shadow-lg border-0 rounded-4 d-none d-md-block">
+          <div class="card-body p-0">
+            <div class="table-responsive">
+              <table class="table table-hover align-middle mb-0">
+                <thead class="table-light">
+                  <tr>
+                    <th>Listing</th>
+                    <th>Guest</th>
+                    <th>Dates</th>
+                    <th>Guests</th>
+                    <th>Total Price</th>
+                    <th>Status</th>
+                    <th class="text-center">Actions</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <% bookings.forEach(booking=> { %>
+                    <tr>
+                      <td class="fw-semibold">
+                        <i class="fa-solid fa-house me-1 text-secondary"></i>
+                        <%= booking.listing.title %>
+                      </td>
+                      <td>
+                        <i class="fa-solid fa-user me-1 text-secondary"></i>
+                        @<%= booking.user.username %>
+                      </td>
+                      <td>
+                        <i class="fa-regular fa-calendar-days me-1 text-secondary"></i>
+                        <%= booking.startDate.toDateString() %> → <%= booking.endDate.toDateString() %>
+                      </td>
+                      <td>
+                        <i class="fa-solid fa-users me-1 text-secondary"></i>
+                        <%= booking.guests %>
+                      </td>
+                      <td>
+                        <i class="fa-solid fa-indian-rupee-sign me-1 text-secondary"></i>
+                        <%= booking.totalPrice %>
+                      </td>
+                      <td>
+                        <span class="badge 
+                      <% if(booking.status === 'confirmed') { %> bg-success 
+                      <% } else if(booking.status.toLowerCase() === 'pending') { %> bg-warning text-dark 
+                      <% } else { %> bg-danger <% } %>">
+                          <%= booking.status %>
+                        </span>
+                      </td>
+                      <td class="text-center">
+                        <% if(booking.status.toLowerCase()==="pending" ) { %>
+                          <form action="/bookings/<%= booking._id %>/confirm" method="POST" class="d-inline">
+                            <button class="btn btn-sm btn-success">
+                              <i class="fa-solid fa-check me-1"></i> Confirm
+                            </button>
+                          </form>
+                          <form action="/bookings/<%= booking._id %>/cancel" method="POST" class="d-inline">
+                            <button class="btn btn-sm btn-danger">
+                              <i class="fa-solid fa-xmark me-1"></i> Cancel
+                            </button>
+                          </form>
+                          <% } else { %>
+                            <span class="badge bg-secondary">
+                              <%= booking.status %>
+                            </span>
+                            <% } %>
+                      </td>
+                    </tr>
+                    <% }) %>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+
+        <!-- Mobile: Card View -->
+        <div class="d-block d-md-none">
+          <div class="row g-3">
+            <% bookings.forEach(booking=> { %>
+              <div class="col-12">
+                <div class="card shadow-sm border-0 rounded-4 p-3 h-100">
+                  <h5 class="fw-bold mb-2">
+                    <i class="fa-solid fa-house me-2 text-secondary"></i>
+                    <%= booking.listing.title %>
+                  </h5>
+
+                  <p class="mb-1 text-muted">
+                    <i class="fa-solid fa-user me-2"></i>@<%= booking.user.username %>
+                  </p>
+
+                  <p class="mb-1 text-muted">
+                    <i class="fa-regular fa-calendar-days me-2"></i>
+                    <%= booking.startDate.toDateString() %> → <%= booking.endDate.toDateString() %>
+                  </p>
+
+                  <p class="mb-1 text-muted">
+                    <i class="fa-solid fa-users me-2"></i>
+                    Guests: <%= booking.guests %>
+                  </p>
+
+                  <p class="mb-2 text-muted">
+                    <i class="fa-solid fa-indian-rupee-sign me-2"></i>
+                    <%= booking.totalPrice %>
+                  </p>
+
+                  <div class="d-flex justify-content-between align-items-center">
+                    <span class="badge 
+                  <% if(booking.status === 'confirmed') { %> bg-success 
+                  <% } else if(booking.status.toLowerCase() === 'pending') { %> bg-warning text-dark 
+                  <% } else { %> bg-danger <% } %>">
+                      <%= booking.status %>
+                    </span>
+
+                    <div>
+                      <% if(booking.status.toLowerCase()==="pending" ) { %>
+                        <form action="/bookings/<%= booking._id %>/confirm" method="POST" class="d-inline">
+                          <button class="btn btn-sm btn-success me-1">
+                            <i class="fa-solid fa-check"></i>
+                          </button>
+                        </form>
+                        <form action="/bookings/<%= booking._id %>/cancel" method="POST" class="d-inline">
+                          <button class="btn btn-sm btn-danger">
+                            <i class="fa-solid fa-xmark"></i>
+                          </button>
+                        </form>
+                        <% } %>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <% }) %>
+          </div>
+        </div>
+
+        <% } %>
+  </div>
+
+  <style>
+    .card {
+      transition: transform 0.2s ease, box-shadow 0.2s ease;
+    }
+
+    .card:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 6px 20px rgba(0, 0, 0, 0.1);
+    }
+  </style>
