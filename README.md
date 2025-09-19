@@ -2,6 +2,8 @@
 
 CozyStay is a **full stack web application** for booking and managing vacation rentals with ease. Users can browse listings, book stays, leave reviews, and hosts can manage their own properties and more!
 
+**🌐 Live Website:** [CozyStay Rentals](https://wonderlust-q5tl.onrender.com/listings)
+
 ---
 
 ## 🚀 Features
@@ -98,7 +100,6 @@ CozyStay is a **full stack web application** for booking and managing vacation r
 - 🚀 Deployed on [Render](https://render.com/)
 - 🗄️ Database hosted with MongoDB Atlas
 
-**🌐 Live Website:** [CozyStay Rentals](https://wonderlust-q5tl.onrender.com/listings)
 
 ---
 
